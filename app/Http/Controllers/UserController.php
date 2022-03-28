@@ -16,7 +16,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required',
+            'password' => 'required|confirmed',
         ]);
 
         $result = User::create([
@@ -34,7 +34,7 @@ class UserController extends Controller
         ]);
 
         if(Auth::attempt($credentials)){
-            $user = $request->Auth::user();
+            $user = Auth::user();
             $token = md5(time()).'.'.md5($request->email);
             $user->forceFill([
                 'api_token' => $token,
